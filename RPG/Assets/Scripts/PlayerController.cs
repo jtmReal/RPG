@@ -9,9 +9,22 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
 
     public Animator myAnim;
+
+    public string areaTransitionName;
+
+    public static PlayerController instance;//static meaning there can only 1 version of this PlayerController(script)
     void Start()
     {
-        
+        if(instance == null)//no other players existing
+        {
+            instance = this;//1st player gets everything associated with this script
+        }
+        else//any other players existing
+        {
+            Destroy(gameObject);//Destroys new player
+        }
+
+        DontDestroyOnLoad(gameObject);//Don't destroy gameobject when loading into new scene
     }
 
     void Update()
