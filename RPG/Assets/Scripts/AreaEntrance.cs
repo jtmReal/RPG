@@ -14,6 +14,8 @@ public class AreaEntrance : MonoBehaviour
         {
             PlayerController.instance.transform.position = transform.position;//Players location is equal to the AreaEntrance location
         }
+
+        UIFade.instance.FadeFromBlack();
     }
 
     void Update()
