@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     public string areaTransitionName;
 
+    public bool canMove = true;
+
     public static PlayerController instance;//static meaning there can only 1 version of this PlayerController(script)
     void Start()
     {
@@ -29,16 +31,26 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        theRB.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * moveSpeed;//Moves Player in specific direction depending on key pressed
+        if (canMove)
+        {
+            theRB.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * moveSpeed;//Moves Player in specific direction depending on key pressed
+        }
+        else
+        {
+            theRB.velocity = Vector2.zero;//Player cant move
+        }
 
         //These 2 Float values below decide which direction the player is moving aka the move animation
         myAnim.SetFloat("moveX", theRB.velocity.x);//This sets the float parameter called moveX to whatever the current x velocity is of the Rigidbody2D
         myAnim.SetFloat("moveY", theRB.velocity.y);//This sets the float parameter called moveY to whatever the current x velocity is of the Rigidbody2D
 
-        if(Input.GetAxisRaw("Horizontal") == 1 || Input.GetAxisRaw("Horizontal") == -1 || Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)//Controls Idle Animations for whenever player stops
+        if (Input.GetAxisRaw("Horizontal") == 1 || Input.GetAxisRaw("Horizontal") == -1 || Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)//Controls Idle Animations for whenever player stops
         {
-            myAnim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));//So if lastMoveX is -1 it faces left, if lastmoveX is 1 it faces right
-            myAnim.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));//So if lastMoveY is -1 it faces down, if lastmoveY is 1 it faces up
+            if (canMove)//so if player is talking to an npc this will be set to false meaning player cannot move
+            {
+                myAnim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));//So if lastMoveX is -1 it faces left, if lastmoveX is 1 it faces right
+                myAnim.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));//So if lastMoveY is -1 it faces down, if lastmoveY is 1 it faces up
+            }
         }
     }
 }
