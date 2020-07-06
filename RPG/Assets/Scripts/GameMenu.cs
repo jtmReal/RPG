@@ -22,6 +22,8 @@ public class GameMenu : MonoBehaviour
     public Text statusName, statusHP, statusMp, statusStrength, statusDef, statusWpnEqpd, statusWpnPwr, statusArmrEqpd, statusArmrPwr, statusExp;
     public Image statusImage;
 
+    public ItemButton[] itemButtons;
+
     void Start()
     {
         theMenu.SetActive(false);
@@ -137,5 +139,28 @@ public class GameMenu : MonoBehaviour
         statusArmrPwr.text = playerStats[selected].armrPwr.ToString();
         statusExp.text = (playerStats[selected].expToNextLevel[playerStats[selected].playerLevel] - playerStats[selected].currentEXP).ToString();
         statusImage.sprite = playerStats[selected].charImage;
+    }
+
+
+    public void ShowItems()
+    {
+        GameManager.instance.SortItems();
+
+        for(int i = 0; i< itemButtons.Length; i++)
+        {
+            itemButtons[i].buttonValue = i;//assigns value to each button
+
+            if(GameManager.instance.itemsHeld[i] != "")//If there is an item there 
+            {
+                itemButtons[i].buttonImage.gameObject.SetActive(true);//Makes sure image is visible for button/item
+                itemButtons[i].buttonImage.sprite = GameManager.instance.GetItemDetails(GameManager.instance.itemsHeld[i]).itemSprite;//Adds specific sprite
+                itemButtons[i].amountText.text = GameManager.instance.numberOfItems[i].ToString();//Gets number of items
+            }
+            else//If theres no item there
+            {
+                itemButtons[i].buttonImage.gameObject.SetActive(false);
+                itemButtons[i].amountText.text = "";
+            }
+        }
     }
 }
